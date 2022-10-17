@@ -1,4 +1,4 @@
-﻿Manager M = new();
+Manager M = new();
 char vvod;
 do
 {
@@ -22,34 +22,52 @@ do
             break;
         case '3':
             {
-                char vvod2;
-                do
+                if (M.GetCount() > 0)
+                {
+                    char vvod2;
+                    do
+                    {
+                        Console.Clear();
+                        Console.WriteLine("1.Изменить логин\n2.Изменить пароль");
+                        Console.WriteLine("Esc - Выход\n");
+                        vvod2 = Console.ReadKey().KeyChar;
+                        switch (vvod2)
+                        {
+                            case '1':
+                                Console.Clear();
+                                M.EditName(M.Search());
+                                Console.WriteLine("Press any key to continue.\n");
+                                Console.ReadKey();
+                                break;
+                            case '2':
+                                Console.Clear();
+                                M.EditPass(M.Search());
+                                Console.WriteLine("Press any key to continue.\n");
+                                Console.ReadKey();
+                                break;
+                        }
+                    } while (vvod2 != 27);
+                }
+                else
                 {
                     Console.Clear();
-                    Console.WriteLine("1.Изменить логин\n2.Изменить пароль");
-                    Console.WriteLine("Esc - Выход\n");
-                    vvod2 = Console.ReadKey().KeyChar;
-                    switch (vvod2)
-                    {
-                        case '1':
-                            Console.Clear();
-                            M.EditName(M.Search());
-                            Console.WriteLine("Press any key to continue.\n");
-                            Console.ReadKey();
-                            break;
-                        case '2':
-                            Console.Clear();
-                            M.EditPass(M.Search());
-                            Console.WriteLine("Press any key to continue.\n");
-                            Console.ReadKey();
-                            break;
-                    }
-                } while (vvod2 != 27);
+                    Console.WriteLine("Список пуст.");
+                    Console.WriteLine("Press any key to continue.\n");
+                    Console.ReadKey();
+                }
             }
             break;
         case '4':
-            Console.Clear();
-            M.ShowPass();
+            if (M.GetCount() > 0)
+            {
+                Console.Clear();
+                Console.WriteLine("Пароль: " + M.ShowPass()); 
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Список пуст.");
+            }
             Console.WriteLine("Press any key to continue.\n");
             Console.ReadKey();
             break;
@@ -66,6 +84,7 @@ class Manager
 {
     Dictionary<string, string> PassBase = new Dictionary<string, string>();
 
+    public int GetCount() { return PassBase.Count; }
     public void Add()
     {   
         Console.Write("Введите логин: ");
@@ -73,17 +92,26 @@ class Manager
         Console.Write("Введите пароль: ");
         string? pass = Console.ReadLine();
         PassBase.Add(name, pass);
+        Console.WriteLine("Добавлено.");
     }
     public void Delete()
     {
-        Console.Write("Введите логин: ");
-        string? name = Console.ReadLine();
-        PassBase.Remove(name);
+        if (PassBase.Count > 0)
+        {
+            Console.Write("Введите логин: ");
+            string? name = Console.ReadLine();
+            PassBase.Remove(name);
+        }
+        else
+            Console.WriteLine("Список пуст.");
     }
     public void Print()
     {
-        foreach (var pass in PassBase)
-            Console.WriteLine(pass);
+        if (PassBase.Count > 0)
+            foreach (var pass in PassBase)
+                Console.WriteLine(pass);
+        else
+            Console.WriteLine("Список пуст.");
     }
     public string ShowPass()
     {
